@@ -1,0 +1,21 @@
+# --- Python Specific ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+venv/
+*.pyc
+.env
+.pytest_cache/
+# --- Database Files ---
+*.db
+*.sqlite
+*.sqlite3
+# Ignore local data dumps but keep your migrations!
+*.sql
+
+# --- Alembic Specific ---Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+# We keep the versions folder, but sometimes developers 
+# ignore the logs or local dev configs.
+migrations/log/

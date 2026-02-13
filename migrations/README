@@ -1,0 +1,23 @@
+Generic single-database configuration.#alembic init migrations (your folder name)
+#migrations/env.py  [
+
+    from my_app.models import Base  # Import your Base class
+    target_metadata = Base.metadata   # Set the metadata
+]
+#run command 
+alembic revision --autogenerate -m "message"
+#cerate table 
+alembic upgrade head
+#rollabck
+alembic downgrade head
+
+if you want create new table create fikle in models folder filename with_model.
+alembic revision --autogenerate -m "message"
+alembic upgrade head
+
+if update any table add column in any table don't create any new file for table use existing file and update
+alembic revision --autogenerate -m "message"
+alembic upgrade head
+
+
+#
