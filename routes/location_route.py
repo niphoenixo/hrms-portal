@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status,Request
 from sqlalchemy.orm import Session
 from database.db import get_db
-from models import Location
+from models import Location,Company
 from database.context import trace_id
 import uuid
 from services.location.location_service import LocationService
@@ -9,20 +9,23 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from custom_response.json_response import CustomJSONResponse
 from schemas.location_schema import LocationCreate,LocationResponseEnvelope
+from dependencies.company_dependencies import get_valid_company
+
 router = APIRouter(
     prefix="/location",
     tags=["Location"]
 )
 
 @router.get("/{company_uuid}/list")
-def get_location_list(company_uuid:str,db: Session = Depends(get_db)):
+def get_location_list(company_uuid:str,db: Session = Depends(get_db),company: Company = Depends(get_valid_company)):
     locations = db.query(Location).all()
     if not locations:
         return CustomJSONResponse.from_not_found("locations List")
     
+    company_detail ={"company_name":company.company_name,"company_uuid":company.company_uuid}
     return {
         "message": "location list", 
-        "data": locations, 
+        "data": {"company_detail":company_detail,"location_detail":locations},
         "trace_id": trace_id.get()
     }
 
