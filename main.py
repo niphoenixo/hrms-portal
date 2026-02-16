@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from database.db import get_db,engine,Base
 from sqlalchemy.orm import Session
 from config import config
-from routes import (company_route,location_route)
+from routes import (company_route,location_route,fake_route,bulk_data_route)
 from middleware.trace_id_middleware import AddTraceIDContext
 #custom error
 from fastapi.exceptions import RequestValidationError
@@ -33,7 +33,10 @@ app.add_middleware(AddTraceIDContext)
 #add routes
 app.include_router(company_route.router)
 app.include_router(location_route.router)
-
+#fake data create
+app.include_router(fake_route.router)
+#bulk upload 
+app.include_router(bulk_data_route.router)
 @app.get("/")
 def root():
     return {
