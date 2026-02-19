@@ -26,5 +26,13 @@ class AuthService():
         encoded_jwt = jwt.encode(to_encode, TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM)
         return encoded_jwt
     
-    def verify_token():
-        pass
+    def verify_token(get_token:str):
+        try:
+            token = get_token.split(" ")[-1]
+            decoded_data = jwt.decode(token, TOKEN_SECRET_KEY, algorithms=[TOKEN_ALGORITHM])
+            return {"message":"verify Token","status":True,"data":decoded_data} 
+        except jwt.ExpiredSignatureError:
+            return {"message":"Token has expired","status":False,"data":None} 
+        except jwt.InvalidTokenError:
+            return {"message":"Invalid token","status":False,"data":None}
+

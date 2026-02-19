@@ -1,8 +1,11 @@
-from fastapi import APIRouter,Depends
+import jwt
+from fastapi import APIRouter,Depends,Request
 from database.db import get_db
 from database.context import trace_id
 from sqlalchemy.orm import Session
-from schemas.user_schema import (UserRegister,UserLogin,UserRegistrationResponse,UserLoginResponse )
+from schemas.user_schema import (UserRegister,UserLogin,UserRegistrationResponse,UserLoginResponse)
+from schemas.generic_schema import GenericResponse
+
 from models.user_model import User
 from sqlalchemy import Select
 from services.auth.auth_service import AuthService
@@ -50,3 +53,25 @@ def register(body:UserLogin,db:Session =Depends(get_db)):
     else:
         return CustomJSONResponse.from_not_found("User")
 
+    
+@router.get("/verifytoken",response_model=UserRegistrationResponse)
+def verify_token(request:Request,db:Session = Depends(get_db)):
+    get_token=request.headers.get("authorization",None)
+    invalid_ids = {None, "", "null", "none", '""'}
+    if not get_token or not get_token.strip() or get_token.lower() in invalid_ids:
+        return CustomJSONResponse.error_json("token","Invalid token")
+        
+    else:
+        is_verify= AuthService.verify_token(get_token)
+        if is_verify['status']==True:
+            stmt = Select(User).where(User.email == is_verify["data"]["sub"])
+            user = db.scalars(stmt).first()
+            return {
+                "message": is_verify["message"], 
+                "data": [user], 
+                "trace_id": trace_id.get()
+            }
+        else:
+            return CustomJSONResponse.error_json("token",is_verify["message"],401)
+
+    
