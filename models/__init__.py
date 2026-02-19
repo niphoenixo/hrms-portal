@@ -10,6 +10,15 @@ from .company_model import (
 )
 from .location_model import Location
 from .employee_model import Employee, EmployeeProfile
+from .branch_model import Branch
+from .user_model import (
+    User,
+    Role,
+    Permissions,
+    UserRoles,
+    RolePermissions,
+    AuditLog 
+)
 
 __all__ = [
     "Company",
@@ -21,6 +30,13 @@ __all__ = [
     "CompanyWorkType",
     "CompanyEmpAction",
     "Location",
+    "Branch",
     "Employee",
-    "EmployeeProfile"
+    "EmployeeProfile",
+    "User",
+    "Role",
+    "Permissions",
+    "UserRoles",
+    "RolePermissions",
+    "AuditLog"
 ]

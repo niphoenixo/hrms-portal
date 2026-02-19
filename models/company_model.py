@@ -39,7 +39,7 @@ class Company(Base):
     company_web = Column(MEDIUMTEXT, nullable=True)
     
     company_logo = Column(String(255), nullable=True, comment='company logo image')
-    comapany_email = Column(String(255), nullable=False, comment='company email')
+    company_email = Column(String(255), nullable=False, comment='company email')
     company_contact_no = Column(String(255), nullable=False, comment='company contact no')
     company_country = Column(String(50), nullable=True, comment='company country')
 
@@ -145,7 +145,7 @@ class CompanyAction(Base):
     __tablename__ = 'company_action'
     id = Column(BIGINT(unsigned=True), primary_key=True)
     action_uuid = Column(String(36), nullable=False)
-    company_id = Column(BIGINT(unsigned=True), ForeignKey('companies.id'), nullable=False)
+    company_id = Column(BIGINT(unsigned=True))
     action_name = Column(String(25), nullable=False)
     is_active = Column(TINYINT, server_default='0', nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
