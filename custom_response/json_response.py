@@ -5,7 +5,7 @@ class CustomJSONResponse:
 
     def __init__(self, status_code=400, message="Validation failed", custom_details=None):
         self.status_code = status_code
-        self.message = message
+        self.message = message if message else "Validation failed"
         self.trace_id = trace_id.get()
         self.custom_details = custom_details or []
 
@@ -16,7 +16,7 @@ class CustomJSONResponse:
             content={
                 "message": self.message,
                 "trace_id": self.trace_id,
-                "detail": details
+                "data": details
             },
         )
 
@@ -37,7 +37,7 @@ class CustomJSONResponse:
         return cls(
             status_code=500, 
             message=message
-        ).to_json(error_details=[{"field": "server", "message": "An unexpected error occurred."}])
+        ).to_json(error_details=[{"field": "server", "message": f"An unexpected error occurred.:{str(e)}"}])
     
 
     @classmethod
@@ -49,3 +49,20 @@ class CustomJSONResponse:
             "field": resource_name.lower().replace(" ", "_"), 
             "message": f"The requested {resource_name} does not exist."
         }])
+    
+    @classmethod
+    def error_json(cls, field=None,message=None,status_code=404):
+        return cls(
+            status_code=status_code,
+            message=message
+        ).to_json(error_details=[{
+            "field": field if field else "field", 
+            "message": message if message else "error found",
+        }])
+    
+    @classmethod
+    def success_json(cls, details,message=None):
+        return cls(
+            status_code=200,
+            message=message if message else "success"
+        ).to_json(error_details=[details])
