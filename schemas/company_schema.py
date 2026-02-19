@@ -19,7 +19,7 @@ class CompanyBase(BaseModel):
     company_type_meta: str
     company_web: Optional[str] = None
     company_logo: Optional[str] = None
-    comapany_email: EmailStr
+    company_email: EmailStr
     company_contact_no: str
     company_gst_no: Optional[str] = None
     company_pan_no: str

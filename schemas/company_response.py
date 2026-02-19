@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict, field_validator
 from typing import Optional, Dict, Any,List
 from datetime import datetime
-
+from .generic_schema import GenericResponse
 class CompanyResponse(BaseModel):
     company_uuid: str
     company_name: str
@@ -32,9 +32,8 @@ class CompanyResponse(BaseModel):
     def transform_active_status(cls, v: Any) -> str:
         # 0 = inactive, 1 = active, 2 = hold, 3 = deleted
         status_map = {0: "inactive", 1: "active", 2: "hold", 3: "deleted"}
-        return status_map.get(v, "active") # Defaults to active if not 0
+        return status_map.get(v, "active")
     
-class CompanyResponseEnvelope(BaseModel):
-    message: str
-    trace_id: str
-    data: List[CompanyResponse]
+
+CompanyResponseEnvelope = GenericResponse[CompanyResponse]
+
