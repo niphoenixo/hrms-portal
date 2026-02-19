@@ -66,11 +66,14 @@ def verify_token(request:Request,db:Session = Depends(get_db)):
         if is_verify['status']==True:
             stmt = Select(User).where(User.email == is_verify["data"]["sub"])
             user = db.scalars(stmt).first()
-            return {
-                "message": is_verify["message"], 
-                "data": [user], 
-                "trace_id": trace_id.get()
-            }
+            if user:
+                return {
+                    "message": is_verify["message"], 
+                    "data": [user], 
+                    "trace_id": trace_id.get()
+                }
+            else:
+                return CustomJSONResponse.error_json("token","Unauthorized: Access is denied due to invalid user.",401)
         else:
             return CustomJSONResponse.error_json("token",is_verify["message"],401)
 

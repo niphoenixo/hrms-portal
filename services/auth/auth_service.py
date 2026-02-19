@@ -30,9 +30,9 @@ class AuthService():
         try:
             token = get_token.split(" ")[-1]
             decoded_data = jwt.decode(token, TOKEN_SECRET_KEY, algorithms=[TOKEN_ALGORITHM])
-            return {"message":"verify Token","status":True,"data":decoded_data} 
+            return {"message":"Verify token","status":True,"data":decoded_data} 
         except jwt.ExpiredSignatureError:
-            return {"message":"Token has expired","status":False,"data":None} 
+            return {"message":"Unauthorized: Token has been expired","status":False,"data":None} 
         except jwt.InvalidTokenError:
-            return {"message":"Invalid token","status":False,"data":None}
+            return {"message":"Unauthorized: Access is denied due to invalid token.","status":False,"data":None}
 
